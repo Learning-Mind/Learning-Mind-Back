@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "learning-mind-back"
+version = "0.1.0"
+description = ""
+authors = ["Marcella <marcella@jejememe.com>"]
+readme = "README.md"
+packages = [{include = "learning_mind_back"}]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+fastapi = "^0.101.1"
+uvicorn = "^0.23.2"
+sqlalchemy = "^2.0.19"
+pydantic = "^2.1.1"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
