@@ -1,9 +1,19 @@
 from fastapi import FastAPI
 
+from app.lifespan import lifespan
+from app.router import router
 
-app = FastAPI(
-    # title=OPEN_API_TITLE,
-    # description=OPEN_API_DESCRIPTION,
-    docs_url="/api/docs",
-    redoc_url="/api/redoc",
-)
+
+def app() -> FastAPI:
+    app = FastAPI(
+        lifespan=lifespan,
+        docs_url="/api/docs",
+        redoc_url="/api/redoc",
+    )
+
+    app.include_router(
+        router=router,
+        # prefix='/'
+    )
+    
+    return app
