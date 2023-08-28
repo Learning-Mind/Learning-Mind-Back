@@ -1,10 +1,15 @@
 from logging.config import fileConfig
 import os
+import dotenv
 
 from sqlalchemy import engine_from_config
 from sqlalchemy import pool
 
 from alembic import context
+
+dotenv_file = dotenv.find_dotenv()
+dotenv.load_dotenv(dotenv_file)
+
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
@@ -30,9 +35,11 @@ target_metadata = UserModel.metadata
 # ... etc.
 
 if not config.get_main_option("sqlalchemy.url"):
+    dsn = os.getenv('PSQL_ASYNC_DB_DSN')
+
     config.set_main_option(
         "sqlalchemy.url",
-        "<database_url>"
+        dsn
     )
     
 
