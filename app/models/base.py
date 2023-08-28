@@ -1,8 +1,9 @@
 from typing import Any, Dict, List
+from sqlalchemy.ext.asyncio import AsyncAttrs
 from sqlalchemy.orm import DeclarativeBase
 import sqlalchemy as sa
 
-class Base(DeclarativeBase):
+class Base(AsyncAttrs, DeclarativeBase):
     """Base class used for model definitions."""
     metadata = sa.MetaData()
     
