@@ -22,11 +22,11 @@ if config.config_file_name is not None:
 
 # add your model's MetaData object here
 # for 'autogenerate' support
-# from myapp import mymodel
-# target_metadata = mymodel.Base.metadata
-from app.models.user import UserModel
+from app.models import load_all_models
+from app.models.base import Base
 
-target_metadata = UserModel.metadata
+load_all_models()
+target_metadata = Base.metadata
 
 
 # other values from the config, defined by the needs of env.py,
@@ -35,7 +35,7 @@ target_metadata = UserModel.metadata
 # ... etc.
 
 if not config.get_main_option("sqlalchemy.url"):
-    dsn = os.getenv('PSQL_ASYNC_DB_DSN')
+    dsn = os.getenv('PSQL_DB_DSN')
 
     config.set_main_option(
         "sqlalchemy.url",
