@@ -8,7 +8,7 @@ from sqlalchemy.orm import (
 from app.models.base import Base
 
 
-class UserModel(Base):
+class User(Base):
     __tablename__ = "user"
     # __table_args__ = { "schema": "myapi" }
 
