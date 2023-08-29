@@ -2,7 +2,6 @@ from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.db.session import get_async_session
-from app.models.user import UserModel
 
 
 router = APIRouter()
