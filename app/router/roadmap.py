@@ -3,7 +3,7 @@ from fastapi import APIRouter, Depends
 from app.db.session import get_async_session
 from app.service.roadmap import RoadmapService
 
-from schema.roadmap import CreateRoadmapSchema, RoadmapResponseSchema
+from schema.roadmap import CreateRoadmapNodeSchema, CreateRoadmapSchema, RoadmapNodeResponseSchema, RoadmapResponseSchema
 
 
 router = APIRouter()
@@ -27,7 +27,24 @@ async def write_roadmap(
         title=result.title
     )
 
-# TODO 로드맵 노드 생성 API
+# 로드맵 노드 생성 API
+@router.post(
+    path="/node/write",
+    response_model=RoadmapNodeResponseSchema
+)
+async def write_roadmap_node(
+    body: CreateRoadmapNodeSchema,
+    se: AsyncSession = Depends(get_async_session)
+):
+    result = await RoadmapService(se).create_roadmap_node(roadmap_node=body)
+    return RoadmapNodeResponseSchema(
+        code=200,
+        message="",
+        node_id=result.node_id,
+        roadmap_id=result.roadmap_id,
+        title=result.title,
+        parent_id=result.parent_id,
+    )
 
 # TODO 로드맵 노드 이름 수정 API
 
