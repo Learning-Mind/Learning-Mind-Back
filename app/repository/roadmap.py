@@ -1,7 +1,12 @@
+from typing import List
+from pydantic import TypeAdapter
 from sqlalchemy import select
+from sqlalchemy.orm import selectinload
+
 from app.models.roadmap import Roadmap, RoadmapNode
 from app.repository.base import BaseDataManager
 from schema.roadmap import RoadmapNodeSchema, RoadmapSchema
+
 
 
 class RoadmapDataManager(BaseDataManager):
@@ -9,6 +14,30 @@ class RoadmapDataManager(BaseDataManager):
         """Create roadmap to database."""
 
         model = await self.add_one(roadmap)
+        return RoadmapSchema(**model.to_dict())
+    
+    async def get_roadmap_by_id(self, roadmap_id: int):
+        """Get Roadmap by roadmap_id."""
+        
+        stmt = select(Roadmap)\
+            .options(selectinload(Roadmap.nodes))\
+            .where(Roadmap.roadmap_id == roadmap_id)
+            
+        model = (await self.session.execute(stmt)).scalars().one()
+
+        return RoadmapSchema(
+            roadmap_id=model.roadmap_id,
+            title=model.title,
+            nodes=[RoadmapNodeSchema(**node.to_dict()) for node in model.nodes]
+        )
+        
+    async def update_roadmap_title(self, roadmap_id: int, title: str):
+        model = (await self.session.execute(
+            select(Roadmap)
+            .filter_by(roadmap_id=roadmap_id)
+        )).fetchone()
+        
+        model.title = title
         return RoadmapSchema(**model.to_dict())
     
     async def get_root_node(self, roadmap_id: int) -> RoadmapNodeSchema | None:

@@ -5,6 +5,10 @@ from schema.roadmap import CreateRoadmapNodeSchema, CreateRoadmapSchema
 
 
 class RoadmapService(BaseService):
+    async def get_roadmap_item_by_id(self, roadmap_id: int):
+        """Get roadmap and nodes by roadmap_id."""
+        return await RoadmapDataManager(self.session).get_roadmap_by_id(roadmap_id=roadmap_id)
+
     async def create_roadmap(self, roadmap: CreateRoadmapSchema):
         """Create Roadmap."""
         roadmap_model = Roadmap(
