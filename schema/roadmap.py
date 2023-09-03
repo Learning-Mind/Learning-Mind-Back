@@ -25,7 +25,7 @@ class CreateRoadmapSchema(BaseModel):
 class RoadmapResponseSchema(ResponseSchema):
     roadmap_id: int
     title: str
-    nodes: List[Any]
+    nodes: List[Any] = []
     # created_at: datetime
     # updated_at: datetime
 
@@ -34,6 +34,7 @@ class RoadmapNodeSchema(BaseModel):
     roadmap_id: int
     title: str
     parent_id: int | None = None
+    order_in_parent: int
     # roadmap: 
     # children
     # parent
@@ -48,6 +49,7 @@ class RoadmapNodeResponseSchema(ResponseSchema):
     roadmap_id: int
     title: str
     parent_id: int | None = None
+    order_in_parent: int
     # roadmap: 
     # children
     # parent

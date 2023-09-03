@@ -66,6 +66,7 @@ async def write_roadmap_node(
         roadmap_id=result.roadmap_id,
         title=result.title,
         parent_id=result.parent_id,
+        order_in_parent=result.order_in_parent,
     )
 
 # TODO 로드맵 노드 이름 수정 API

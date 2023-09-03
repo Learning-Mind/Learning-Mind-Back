@@ -1,7 +1,8 @@
 from typing import List
 from pydantic import TypeAdapter
-from sqlalchemy import select
+from sqlalchemy import func, select
 from sqlalchemy.orm import selectinload
+from sqlalchemy.orm.exc import NoResultFound
 
 from app.models.roadmap import Roadmap, RoadmapNode
 from app.repository.base import BaseDataManager
@@ -47,14 +48,26 @@ class RoadmapDataManager(BaseDataManager):
             RoadmapNode.roadmap_id == roadmap_id, 
             RoadmapNode.parent_id == None
         )
-        model = await self.get_one(stmt)
-        
-        # TODO exception...
-        if model is None:
-            return None
-        else:
+        try:
+            model = await self.get_one(stmt)
             return RoadmapNodeSchema(**model.to_dict())
+        except NoResultFound:
+            return None
 
+    async def get_last_node_in_parent(self, roadmap_id: int, parent_id: int | None) -> RoadmapNodeSchema | None:
+        """Get last node - max number of order_in_parent."""
+        
+        stmt = select(RoadmapNode).where(
+            RoadmapNode.roadmap_id == roadmap_id,
+            RoadmapNode.parent_id == parent_id,
+        ).order_by(RoadmapNode.order_in_parent.desc()).limit(1)
+
+        try:
+            model: RoadmapNode = await self.get_one(stmt)
+            return RoadmapNodeSchema(**model.to_dict())
+        except NoResultFound:
+            return None
+        
     async def add_roadmap_node(self, roadmap_node: RoadmapNode):
         """Create Roadmap Node to database."""
         model = await self.add_one(roadmap_node)

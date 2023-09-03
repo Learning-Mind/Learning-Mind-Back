@@ -22,16 +22,21 @@ class RoadmapService(BaseService):
         if roadmap_node.parent_id is None:
             root_node = await RoadmapDataManager(self.session).get_root_node(roadmap_id=roadmap_node.parent_id)
             
-            if root_node:
-                # TODO root node가 있으면 excetion
-                pass
+            # if root_node:
+            #     # TODO root node가 있으면 excetion
+            #     pass
 
         # TODO parent id 가 같은 roadmap에 있는지 확인
+        
+        # order_in_parent 계산
+        older_node = await RoadmapDataManager(self.session).get_last_node_in_parent(roadmap_id=roadmap_node.roadmap_id, parent_id=roadmap_node.parent_id)
+        order_in_parent = older_node.order_in_parent + 1 if older_node is not None else 0
         
         roadmap_node_model = RoadmapNode(
             title=roadmap_node.title,
             roadmap_id=roadmap_node.roadmap_id,
             parent_id=roadmap_node.parent_id,
+            order_in_parent=order_in_parent,
         )
         
         return await RoadmapDataManager(self.session).add_roadmap_node(roadmap_node_model)
