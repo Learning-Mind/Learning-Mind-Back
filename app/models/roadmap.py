@@ -23,5 +23,3 @@ class RoadmapNode(Base):
     children: Mapped[List["RoadmapNode"]] = relationship("RoadmapNode", back_populates="parent")
     parent: Mapped["RoadmapNode"] = relationship("RoadmapNode", back_populates="children", remote_side=[node_id])
     order_in_parent: Mapped[int] = mapped_column("order_in_parent", default=0)
-
-    
