@@ -21,45 +21,45 @@ memo_roadmapnode_asso_table = Table(
 )
 
 
-class RoadmapModel(Base):
+class Roadmap(Base):
     __tablename__ = "roadmap"
     
     roadmap_id: Mapped[int] = mapped_column("roadmap_id", primary_key=True, autoincrement=True)
     title: Mapped[str] = mapped_column("title")
-    nodes: Mapped[List["RoadmapNodeModel"]] = relationship(back_populates="roadmap")
-    memos: Mapped["MemoModel"] = relationship(
+    nodes: Mapped[List["RoadmapNode"]] = relationship(back_populates="roadmap")
+    memos: Mapped["Memo"] = relationship(
         secondary=memo_roadmap_asso_table,
         back_populates="roadmaps"
     )
     
     
-class RoadmapNodeModel(Base):
+class RoadmapNode(Base):
     __tablename__ = "roadmap_node"
     
     node_id: Mapped[int] = mapped_column("node_id", primary_key=True, autoincrement=True)
     roadmap_id: Mapped[int] = mapped_column(ForeignKey("roadmap.roadmap_id"))
-    roadmap: Mapped["RoadmapModel"] = relationship(back_populates="nodes")
+    roadmap: Mapped["Roadmap"] = relationship(back_populates="nodes")
     title: Mapped[str] = mapped_column("title")
     parent_id: Mapped[int] = mapped_column(ForeignKey("roadmap_node.node_id"), nullable=True)
-    children: Mapped[List["RoadmapNodeModel"]] = relationship("RoadmapNodeModel", back_populates="parent")
-    parent: Mapped["RoadmapNodeModel"] = relationship("RoadmapNodeModel", back_populates="children", remote_side=[node_id])
+    children: Mapped[List["RoadmapNode"]] = relationship("RoadmapNode", back_populates="parent")
+    parent: Mapped["RoadmapNode"] = relationship("RoadmapNode", back_populates="children", remote_side=[node_id])
     order_in_parent: Mapped[int] = mapped_column("order_in_parent", default=0)
-    memos: Mapped["MemoModel"] = relationship(
+    memos: Mapped["Memo"] = relationship(
         secondary=memo_roadmapnode_asso_table,
         back_populates="roadmap_nodes"
     )
 
 
-class MemoModel(Base):
+class Memo(Base):
     __tablename__ = "memo"
     
     memo_id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
     contents: Mapped[str] = mapped_column("contents")
-    roadmaps: Mapped[List["RoadmapModel"]] = relationship(
+    roadmaps: Mapped[List["Roadmap"]] = relationship(
         secondary=memo_roadmap_asso_table,
         back_populates="memos"
     )
-    roadmap_nodes: Mapped[List["RoadmapNodeModel"]] = relationship(
+    roadmap_nodes: Mapped[List["RoadmapNode"]] = relationship(
         secondary=memo_roadmapnode_asso_table,
         back_populates="memos"
     )
