@@ -29,7 +29,7 @@ class BaseDataManager(SessionMixin):
 
     async def get_one(self, select_stmt: Executable) -> Any:
         executed = await self.session.execute(select_stmt)
-        return executed.fetchone()
+        return executed.scalars().one()
 
     async def get_all(self, select_stmt: Executable) -> List[Any]:
         executed = await self.session.execute(select_stmt)

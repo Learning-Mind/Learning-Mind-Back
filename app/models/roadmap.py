@@ -19,8 +19,9 @@ class RoadmapNode(Base):
     roadmap_id: Mapped[int] = mapped_column(ForeignKey("roadmap.roadmap_id"))
     roadmap: Mapped["Roadmap"] = relationship(back_populates="nodes")
     title: Mapped[str] = mapped_column("title")
-    parent_id: Mapped[int] = mapped_column(ForeignKey("roadmap_node.node_id"))
-    children = relationship("RoadmapNode", back_populates="parent")
-    parent = relationship("RoadmapNode", back_populates="children", remote_side=[node_id])
+    parent_id: Mapped[int] = mapped_column(ForeignKey("roadmap_node.node_id"), nullable=True)
+    children: Mapped[List["RoadmapNode"]] = relationship("RoadmapNode", back_populates="parent")
+    parent: Mapped["RoadmapNode"] = relationship("RoadmapNode", back_populates="children", remote_side=[node_id])
+    order_in_parent: Mapped[int] = mapped_column("order_in_parent", default=0)
 
     
