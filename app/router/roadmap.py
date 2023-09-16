@@ -29,6 +29,27 @@ async def get_roadmap_item(
         nodes=result.nodes
     )
 
+# 특정 로드맵을 트리 데이터로 조회 API
+@router.get(
+    path="/{roadmap_id}/tree",
+    # summary="id로 로드맵 조회",
+    # description="roadmap_id로 로드맵을 조회합니다.",
+    # response_model=RoadmapResponseSchema,
+)
+async def get_roadmap_item(
+    roadmap_id: int,
+    se: AsyncSession = Depends(get_async_session)
+):
+    result = await RoadmapService(se).get_roadmap_item_by_tree(roadmap_id=roadmap_id)
+
+    # return RoadmapResponseSchema(
+    #     code=0,
+    #     message="",
+    #     roadmap_id=result.roadmap_id,
+    #     title=result.title,
+    #     nodes=result.nodes
+    # )
+
 
 # 로드맵 생성 API
 @router.post(

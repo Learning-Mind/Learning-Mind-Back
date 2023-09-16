@@ -31,6 +31,14 @@ class RoadmapDataManager(BaseDataManager):
             title=model.title,
             nodes=[RoadmapNodeSchema(**node.to_dict()) for node in model.nodes]
         )
+    
+    async def get_roadmap_by_tree(self, roadmap_id: int):
+        stmt = select(Roadmap).options(selectinload(Roadmap.nodes, RoadmapNode.children)).where(Roadmap.roadmap_id == roadmap_id)
+        model: Roadmap | None = await self.get_one(stmt)
+
+        print(model.nodes)
+        
+        return None
         
     async def update_roadmap_title(self, roadmap_id: int, title: str):
         model = (await self.session.execute(
@@ -61,7 +69,7 @@ class RoadmapDataManager(BaseDataManager):
             RoadmapNode.roadmap_id == roadmap_id,
             RoadmapNode.parent_id == parent_id,
         ).order_by(RoadmapNode.order_in_parent.desc()).limit(1)
-
+        
         try:
             model: RoadmapNode = await self.get_one(stmt)
             return RoadmapNodeSchema(**model.to_dict())

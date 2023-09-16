@@ -9,6 +9,10 @@ class RoadmapService(BaseService):
         """Get roadmap and nodes by roadmap_id."""
         return await RoadmapDataManager(self.session).get_roadmap_by_id(roadmap_id=roadmap_id)
 
+    async def get_roadmap_item_by_tree(self, roadmap_id: int):
+        
+        return await RoadmapDataManager(self.session).get_roadmap_by_tree(roadmap_id=roadmap_id)
+    
     async def create_roadmap(self, roadmap: CreateRoadmapSchema):
         """Create Roadmap."""
         roadmap_model = Roadmap(
@@ -30,6 +34,7 @@ class RoadmapService(BaseService):
         
         # order_in_parent 계산
         older_node = await RoadmapDataManager(self.session).get_last_node_in_parent(roadmap_id=roadmap_node.roadmap_id, parent_id=roadmap_node.parent_id)
+        print("\n\nolder_node\n\n\n", older_node)
         order_in_parent = older_node.order_in_parent + 1 if older_node is not None else 0
         
         roadmap_node_model = RoadmapNode(
