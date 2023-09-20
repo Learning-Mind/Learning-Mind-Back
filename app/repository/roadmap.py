@@ -1,10 +1,8 @@
-from typing import List
-from pydantic import TypeAdapter
-from sqlalchemy import func, select
+from sqlalchemy import select
 from sqlalchemy.orm import selectinload
 from sqlalchemy.orm.exc import NoResultFound
 
-from app.models.roadmap import Roadmap, RoadmapNode
+from app.models.sql import Roadmap, RoadmapNode
 from app.repository.base import BaseDataManager
 from schema.roadmap import RoadmapNodeSchema, RoadmapSchema
 

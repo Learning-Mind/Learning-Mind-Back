@@ -1,6 +1,6 @@
-from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.ext.asyncio import AsyncSession as SqlAsyncSession
 from fastapi import APIRouter, Depends
-from app.db.session import get_async_session
+from app.db.session import get_psql_session
 
 from app.schema.memo import CreateMemoSchema
 from app.service.memo import MemoService
@@ -11,7 +11,7 @@ router = APIRouter()
 @router.post("/")
 async def index(
     body: CreateMemoSchema,
-    se: AsyncSession = Depends(get_async_session)
+    se: SqlAsyncSession = Depends(get_psql_session),
 ):
     result = await MemoService(se).create_memo(body)
     
