@@ -10,5 +10,5 @@ class APIErrorScheme(BaseModel):
 
 class APIResponseSchema(BaseModel, Generic[PayloadT]):
     success: bool
-    payload: PayloadT | None
-    error: APIErrorScheme | None
+    payload: PayloadT | None = None
+    error: APIErrorScheme | None = None
