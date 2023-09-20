@@ -1,7 +1,7 @@
 from app.models.sql import Roadmap, RoadmapNode
 from app.repository.roadmap import RoadmapDataManager
 from app.service.base import BaseService
-from schema.roadmap import CreateRoadmapNodeSchema, CreateRoadmapSchema
+from app.schema.roadmap import CreateRoadmapNodeSchema, CreateRoadmapSchema
 
 
 class RoadmapService(BaseService):
