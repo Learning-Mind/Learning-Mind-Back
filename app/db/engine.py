@@ -1,14 +1,20 @@
 from fastapi import FastAPI
-from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker
-from app.config import settings
+from neo4j import AsyncDriver, AsyncGraphDatabase
+from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker, AsyncEngine
 
+from app.config import settings
 from app.models.base import Base
 
 
 async def set_db_engines(app: FastAPI) -> None:
-    postgres_engine = create_async_engine(
+    postgres_engine: AsyncEngine = create_async_engine(
         settings.psql_async_db_dsn,
         echo=True,
+    )
+    
+    neo4j_driver: AsyncDriver = AsyncGraphDatabase.driver(
+        settings.neo4j_bolt_uri,
+        auth=(settings.neo4j_user, settings.neo4j_password)
     )
     
     # async_sessionmaker: a factory for new AsyncSession objects.
@@ -18,6 +24,7 @@ async def set_db_engines(app: FastAPI) -> None:
     app.state.postgres_db_engine = postgres_engine
     app.state.postgres_session_factory = postgres_session_factory
 
+    app.state.neo4j_driver = neo4j_driver
+
     async with postgres_engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
-
