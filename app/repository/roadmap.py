@@ -4,7 +4,7 @@ from sqlalchemy.orm.exc import NoResultFound
 
 from app.models.sql import Roadmap, RoadmapNode
 from app.repository.base import BaseDataManager
-from schema.roadmap import RoadmapNodeSchema, RoadmapSchema
+from app.schema.roadmap import RoadmapNodeSchema, RoadmapSchema
 
 
 

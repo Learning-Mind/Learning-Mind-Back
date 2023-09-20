@@ -3,7 +3,7 @@ from fastapi import APIRouter, Depends
 from app.db.session import get_psql_session
 from app.service.roadmap import RoadmapService
 
-from schema.roadmap import CreateRoadmapNodeSchema, CreateRoadmapSchema, RoadmapNodeResponseSchema, RoadmapResponseSchema
+from app.schema.roadmap import CreateRoadmapNodeSchema, CreateRoadmapSchema, RoadmapNodeResponseSchema, RoadmapResponseSchema
 
 
 router = APIRouter()
