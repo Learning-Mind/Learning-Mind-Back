@@ -12,6 +12,10 @@ class Settings(BaseSettings):
     psql_db_port: str
     psql_db_lt: str
     
+    neo4j_bolt_uri: str
+    neo4j_user: str
+    neo4j_password: str
+
     model_config = SettingsConfigDict(env_file=".env")
     
     @property

@@ -1,6 +1,6 @@
-from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.ext.asyncio import AsyncSession as SqlAsyncSession
 from fastapi import APIRouter, Depends
-from app.db.session import get_async_session
+from app.db.session import get_psql_session
 from app.service.roadmap import RoadmapService
 
 from schema.roadmap import CreateRoadmapNodeSchema, CreateRoadmapSchema, RoadmapNodeResponseSchema, RoadmapResponseSchema
@@ -17,7 +17,7 @@ router = APIRouter()
 )
 async def get_roadmap_item(
     roadmap_id: int,
-    se: AsyncSession = Depends(get_async_session)
+    se: SqlAsyncSession = Depends(get_psql_session)
 ):
     result = await RoadmapService(se).get_roadmap_item_by_id(roadmap_id=roadmap_id)
 
@@ -38,7 +38,7 @@ async def get_roadmap_item(
 )
 async def get_roadmap_item(
     roadmap_id: int,
-    se: AsyncSession = Depends(get_async_session)
+    se: SqlAsyncSession = Depends(get_psql_session)
 ):
     result = await RoadmapService(se).get_roadmap_item_by_tree(roadmap_id=roadmap_id)
 
@@ -60,7 +60,7 @@ async def get_roadmap_item(
 )
 async def write_roadmap(
     body: CreateRoadmapSchema,
-    se: AsyncSession = Depends(get_async_session)
+    se: SqlAsyncSession = Depends(get_psql_session)
 ) -> RoadmapResponseSchema:
     result = await RoadmapService(se).create_roadmap(body)
     return RoadmapResponseSchema(
@@ -77,7 +77,7 @@ async def write_roadmap(
 )
 async def write_roadmap_node(
     body: CreateRoadmapNodeSchema,
-    se: AsyncSession = Depends(get_async_session)
+    se: SqlAsyncSession = Depends(get_psql_session)
 ):
     result = await RoadmapService(se).create_roadmap_node(roadmap_node=body)
     return RoadmapNodeResponseSchema(
